@@ -186,7 +186,7 @@ view : Model -> Html Msg
 view model =
     div [ Attr.id "main__view" ]
         [ div []
-            [ text <| String.fromInt (List.length model.items)
+            [ text <| String.fromInt model.totalItems
             ]
         , div []
             [ text "Sort By: "
