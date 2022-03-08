@@ -147,6 +147,7 @@ export const itemsMachine = createMachine(
       updatePageSize: assign((context, event) => {
         return {
           ...context,
+          page: 1,
           pageSize: event.pageSize,
         };
       }),
@@ -159,6 +160,7 @@ export const itemsMachine = createMachine(
       updateSortBy: assign((context, event) => {
         return {
           ...context,
+          page: 1,
           sortBy: event.sortBy,
         };
       }),
