@@ -30,7 +30,11 @@ export interface Typegen0 {
     delays: never;
   };
   eventsCausingServices: {
-    fetchItems: "ITEMS.SORT_CHANGED" | "ITEMS.RELOAD";
+    fetchItems:
+      | "PAGE.SIZE_CHANGED"
+      | "PAGE.PAGE_CHANGED"
+      | "ITEMS.SORT_CHANGED"
+      | "ITEMS.RELOAD";
   };
   eventsCausingGuards: {};
   eventsCausingDelays: {};

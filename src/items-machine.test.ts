@@ -1,17 +1,20 @@
 import { interpret } from "xstate";
-import { itemsMachine } from "../items";
+import { itemsMachine } from "./items-machine";
 
 describe('"fetchItems" on "loading" state', () => {
   it('"onDone", do "updateItems" and  go to "display"', (done) => {
-    const expectedItems = [
-      {
-        artistName: "John Doe",
-        id: "01234",
-        price: 1.0,
-        currency: "ETH",
-        end: new Date(),
-      },
-    ];
+    const expectedItems = {
+      totalItems: 5,
+      items: [
+        {
+          artistName: "John Doe",
+          id: "01234",
+          price: 1.0,
+          currency: "ETH",
+          end: new Date().toISOString(),
+        },
+      ],
+    };
     const mockFetchMachine = itemsMachine.withConfig({
       services: {
         fetchItems: async (_, event) => expectedItems,
