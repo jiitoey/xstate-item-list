@@ -21,7 +21,7 @@ const mockFetchItemsResult = async (
   const totalItems = 100;
   const nList = [...Array(100).keys()];
   const endDate = new Date();
-  console.log("skip: ", skip, "limit: ", limit);
+  console.log("sortBy: ", sortBy, "skip: ", skip, "limit: ", limit);
   const items = nList.slice(skip, skip + limit).map((n) => {
     return {
       artistName: `${sortBy}-${n}`,

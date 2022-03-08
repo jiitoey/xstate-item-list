@@ -167,7 +167,7 @@ update msg model =
             , MachineConnector.event
                 (E.object
                     [ ( "type", E.string "ITEMS.SORT_CHANGED" )
-                    , ( "sortBy", E.string model.sortBy )
+                    , ( "sortBy", E.string sortBy )
                     ]
                 )
             )
