@@ -201,18 +201,26 @@ view model =
             , button [ onClick <| PageSizeChanged 15 ] [ text "15" ]
             ]
         , div [] <|
-            List.map
-                (\item ->
-                    div []
-                        [ span [ Attr.style "margin-right" "20px" ] [ text item.artistName ]
-                        , span [ Attr.style "margin-right" "20px" ] [ text item.id ]
-                        , span [ Attr.style "margin-right" "20px" ] [ text <| String.fromFloat item.price ]
-                        , span [ Attr.style "margin-right" "20px" ] [ text item.currency ]
-                        , span [ Attr.style "margin-right" "20px" ] [ text item.end ]
-                        ]
-                )
-            <|
-                model.items
+            case model.state of
+                Display ->
+                    List.map
+                        (\item ->
+                            div []
+                                [ span [ Attr.style "margin-right" "20px" ] [ text item.artistName ]
+                                , span [ Attr.style "margin-right" "20px" ] [ text item.id ]
+                                , span [ Attr.style "margin-right" "20px" ] [ text <| String.fromFloat item.price ]
+                                , span [ Attr.style "margin-right" "20px" ] [ text item.currency ]
+                                , span [ Attr.style "margin-right" "20px" ] [ text item.end ]
+                                ]
+                        )
+                    <|
+                        model.items
+
+                Loading ->
+                    [ text "Loading..." ]
+
+                Failed ->
+                    [ text "Failed" ]
         , div []
             [ text <| "Page: " ++ String.fromInt model.page
             , button
