@@ -3,6 +3,7 @@ import { assign, createMachine } from "xstate";
 interface Context {
   pageSize: number;
   page: number;
+  itemsSize: string;
   sortBy: string;
   totalItems: number;
   items: {
@@ -68,6 +69,7 @@ export const itemsMachine = createMachine(
         | { type: "ITEMS.SORT_CHANGED"; sortBy: string }
         | { type: "PAGE.SIZE_CHANGED"; pageSize: number }
         | { type: "PAGE.PAGE_CHANGED"; page: number }
+        | { type: "ITEMS.SIZE_CHANGED"; itemsSize: string }
         | { type: "ITEMS.RELOAD" },
       services: {} as {
         fetchItems: {
@@ -87,6 +89,7 @@ export const itemsMachine = createMachine(
     context: {
       pageSize: 15,
       page: 1,
+      itemsSize: "small",
       sortBy: "artistName",
       totalItems: 0,
       items: [],
@@ -120,6 +123,9 @@ export const itemsMachine = createMachine(
               cond: cannotChangePage,
             },
           ],
+          "ITEMS.SIZE_CHANGED": {
+            actions: "updateItemsSize",
+          },
           "ITEMS.SORT_CHANGED": {
             target: "loading",
             actions: "updateSortBy",
@@ -169,6 +175,12 @@ export const itemsMachine = createMachine(
         return {
           ...context,
           page: event.page,
+        };
+      }),
+      updateItemsSize: assign((context, event) => {
+        return {
+          ...context,
+          itemsSize: event.itemsSize,
         };
       }),
       updateSortBy: assign((context, event) => {

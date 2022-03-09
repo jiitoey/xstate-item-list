@@ -6,6 +6,7 @@ export interface Typegen0 {
     updateItems: "done.invoke.fetch-items";
     updatePageSize: "PAGE.SIZE_CHANGED";
     updatePage: "PAGE.PAGE_CHANGED";
+    updateItemsSize: "ITEMS.SIZE_CHANGED";
     updateSortBy: "ITEMS.SORT_CHANGED";
   };
   internalEvents: {

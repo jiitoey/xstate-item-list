@@ -33,6 +33,7 @@ type alias Model =
     { state : State
     , pageSize : Int
     , page : Int
+    , itemsSize : String
     , sortBy : String
     , totalItems : Int
     , items : List Item
@@ -47,10 +48,11 @@ type State
 
 modelDecoder : D.Decoder Model
 modelDecoder =
-    D.map6 Model
+    D.map7 Model
         stateDecoder
         pageSizeDecoder
         pageDecoder
+        itemsSizeDecoder
         sortByDecoder
         totalItemsDecoder
         itemsDecoder
@@ -86,6 +88,11 @@ pageDecoder =
     D.at [ "context", "page" ] D.int
 
 
+itemsSizeDecoder : D.Decoder String
+itemsSizeDecoder =
+    D.at [ "context", "itemsSize" ] D.string
+
+
 sortByDecoder : D.Decoder String
 sortByDecoder =
     D.at [ "context", "sortBy" ] D.string
@@ -116,6 +123,7 @@ type Msg
     | DecodeStateError D.Error
     | PageChanged Int
     | PageSizeChanged Int
+    | ItemsSizeChanged String
     | SortChanged String
     | ReloadClicked
 
@@ -125,6 +133,7 @@ init _ =
     ( { state = Loading
       , pageSize = 15
       , page = 1
+      , itemsSize = "small"
       , sortBy = "artistName"
       , totalItems = 0
       , items = []
@@ -158,6 +167,16 @@ update msg model =
                 (E.object
                     [ ( "type", E.string "PAGE.SIZE_CHANGED" )
                     , ( "pageSize", E.int pageSize )
+                    ]
+                )
+            )
+
+        ItemsSizeChanged itemsSize ->
+            ( { model | itemsSize = itemsSize }
+            , MachineConnector.event
+                (E.object
+                    [ ( "type", E.string "ITEMS.SIZE_CHANGED" )
+                    , ( "itemsSize", E.string itemsSize )
                     ]
                 )
             )
@@ -200,12 +219,19 @@ view model =
             , button [ onClick <| PageSizeChanged 9 ] [ text "9" ]
             , button [ onClick <| PageSizeChanged 15 ] [ text "15" ]
             ]
+        , div []
+            [ text "Items Size: "
+            , button [ onClick <| ItemsSizeChanged "small" ] [ text "small" ]
+            , button [ onClick <| ItemsSizeChanged "large" ] [ text "large" ]
+            ]
         , div [] <|
             case model.state of
                 Display ->
                     List.map
                         (\item ->
-                            div []
+                            div
+                                [ Attr.style "font-size" model.itemsSize
+                                ]
                                 [ span [ Attr.style "margin-right" "20px" ] [ text item.artistName ]
                                 , span [ Attr.style "margin-right" "20px" ] [ text item.id ]
                                 , span [ Attr.style "margin-right" "20px" ] [ text <| String.fromFloat item.price ]
