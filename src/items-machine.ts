@@ -31,7 +31,20 @@ const mockFetchItemsResult = async (
       end: endDate.toISOString(),
     };
   });
-  return { totalItems, items };
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ totalItems, items });
+    }, 500);
+  }) as Promise<{
+    totalItems: number;
+    items: {
+      artistName: string;
+      id: string;
+      price: number;
+      currency: string;
+      end: string;
+    }[];
+  }>;
 };
 
 const canChangePage = (context: Context, event) => {

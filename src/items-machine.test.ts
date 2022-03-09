@@ -24,7 +24,8 @@ describe('"fetchItems" on "loading" state', () => {
       .onTransition((state) => {
         if (state.matches("display")) {
           try {
-            expect(state.context.items).toBe(expectedItems);
+            expect(state.context.totalItems).toBe(expectedItems.totalItems);
+            expect(state.context.items).toBe(expectedItems.items);
             done();
           } catch (e) {
             done(e);
@@ -69,8 +70,8 @@ it('should reach "loading" given "display" when the "ITEMS.SORT_CHANGED" event o
   expect(actualState.context.sortBy).toBe("id");
 });
 
-it('should stay at "display" given "display" when the "PAGE.SIZE_CHANGED" event occurs', () => {
-  const expectedValue = "display";
+it('should reach "loading" given "display" when the "PAGE.SIZE_CHANGED" event occurs', () => {
+  const expectedValue = "loading";
 
   const actualState = itemsMachine.transition("display", {
     type: "PAGE.SIZE_CHANGED",
@@ -78,12 +79,14 @@ it('should stay at "display" given "display" when the "PAGE.SIZE_CHANGED" event 
   });
 
   expect(actualState.matches(expectedValue)).toBeTruthy();
+  expect(actualState.context.page).toBe(1);
   expect(actualState.context.pageSize).toBe(15);
 });
 
-it('should stay at "display" given "display" when the "PAGE.PAGE_CHANGED" event occurs', () => {
-  const expectedValue = "display";
-
+it('should reach "loading" given "display" on "PAGE.PAGE_CHANGED" event, and not in last page', () => {
+  const expectedValue = "loading";
+  itemsMachine.context.totalItems = 100;
+  itemsMachine.context.pageSize = 10;
   const actualState = itemsMachine.transition("display", {
     type: "PAGE.PAGE_CHANGED",
     page: 2,
@@ -91,6 +94,20 @@ it('should stay at "display" given "display" when the "PAGE.PAGE_CHANGED" event 
 
   expect(actualState.matches(expectedValue)).toBeTruthy();
   expect(actualState.context.page).toBe(2);
+});
+
+it('should stay at "display" given "display" on "PAGE.PAGE_CHANGED" event, on last page', () => {
+  const expectedValue = "display";
+  itemsMachine.context.totalItems = 100;
+  itemsMachine.context.pageSize = 10;
+  itemsMachine.context.page = 10;
+  const actualState = itemsMachine.transition("display", {
+    type: "PAGE.PAGE_CHANGED",
+    page: 11,
+  });
+
+  expect(actualState.matches(expectedValue)).toBeTruthy();
+  expect(actualState.context.page).toBe(10);
 });
 
 it('should reach "loading" given "failed" when the "ITEMS.RELOAD" event occurs', () => {
