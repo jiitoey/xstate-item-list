@@ -2,7 +2,7 @@ import { interpret } from "xstate";
 import { itemsMachine } from "./items-machine";
 
 describe('"fetchItems" on "loading" state', () => {
-  it('"onDone", do "updateItems" and  go to "display"', (done) => {
+  test('"onDone", do "updateItems" and  go to "display"', (done) => {
     const expectedItems = {
       totalItems: 5,
       items: [
@@ -35,7 +35,7 @@ describe('"fetchItems" on "loading" state', () => {
       .start();
   });
 
-  it('"onError", go to "failed"', (done) => {
+  test('"onError", go to "failed"', (done) => {
     const mockFetchMachine = itemsMachine.withConfig({
       services: {
         fetchItems: async (_, event) => {

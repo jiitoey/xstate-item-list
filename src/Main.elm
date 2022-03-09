@@ -176,7 +176,7 @@ update msg model =
             ( model
             , MachineConnector.event
                 (E.object
-                    [ ( "type", E.string "SEARCH_BOX.SEARCH_CLICKED" )
+                    [ ( "type", E.string "ITEMS.RELOAD" )
                     ]
                 )
             )
@@ -217,10 +217,12 @@ view model =
                         model.items
 
                 Loading ->
-                    [ text "Loading..." ]
+                    [ span [] [ text "Loading..." ] ]
 
                 Failed ->
-                    [ text "Failed" ]
+                    [ span [] [ text "Failed!" ]
+                    , button [ onClick ReloadClicked ] [ text "RETRY" ]
+                    ]
         , div []
             [ text <| "Page: " ++ String.fromInt model.page
             , button
