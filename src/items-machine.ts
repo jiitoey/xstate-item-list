@@ -32,7 +32,7 @@ const mockFetchItemsResult = async (
       end: endDate.toISOString(),
     };
   });
-  if (Math.floor(Math.random() * 100) < 30) throw "Forced fetch items ERROR";
+  if (Math.floor(Math.random() * 100) < 0) throw "Forced fetch items ERROR";
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({ totalItems, items });
